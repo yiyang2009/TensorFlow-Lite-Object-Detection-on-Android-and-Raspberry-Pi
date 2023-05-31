@@ -23,6 +23,8 @@ import time
 from threading import Thread
 import importlib.util
 
+VERSION = "0.1.0"
+
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
 class VideoStream:
@@ -30,7 +32,8 @@ class VideoStream:
     def __init__(self,resolution=(640,480),framerate=30):
         # Initialize the PiCamera and the camera image stream
         self.stream = cv2.VideoCapture(0)
-        ret = self.stream.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+        # ret = self.stream.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+        # the camera on my board doesn't support MJPG, use default format - yiyang 2023-05
         ret = self.stream.set(3,resolution[0])
         ret = self.stream.set(4,resolution[1])
             
@@ -75,8 +78,9 @@ parser.add_argument('--labels', help='Name of the labelmap file, if different th
                     default='labelmap.txt')
 parser.add_argument('--threshold', help='Minimum confidence threshold for displaying detected objects',
                     default=0.5)
+# the camera on my board doesn't support 1280x720, use 640x480
 parser.add_argument('--resolution', help='Desired webcam resolution in WxH. If the webcam does not support the resolution entered, errors may occur.',
-                    default='1280x720')
+                    default='640x480')
 parser.add_argument('--edgetpu', help='Use Coral Edge TPU Accelerator to speed up detection',
                     action='store_true')
 
@@ -159,6 +163,12 @@ if ('StatefulPartitionedCall' in outname): # This is a TF2 model
 else: # This is a TF1 model
     boxes_idx, classes_idx, scores_idx = 0, 1, 2
 
+# Sound file location
+object_sounds = {
+    'person': "person 1.wav',
+    'bicyle': "bicyle 1.wav',
+}
+
 # Initialize frame rate calculation
 frame_rate_calc = 1
 freq = cv2.getTickFrequency()
@@ -215,6 +225,13 @@ while True:
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
+
+            # Play sound
+            if object_name in object_sounds:
+                sound_path = object_sounds[object_name]
+                subprocess.run(['aplay', sound_path])
+            else:
+                print("No audio files found: ", object_name)
 
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
