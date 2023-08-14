@@ -141,6 +141,408 @@ freq = cv2.getTickFrequency()
 # Initialize video stream
 videostream = VideoStream(resolution=(imW,imH),framerate=30).start()
 time.sleep(1)
+objects = {
+    'person': {
+        'left': 'person left 1.wav',
+        'right': 'person right 1.wav',
+        'centre': 'person centre 1.wav'
+    },
+    'bicycle': {
+        'left': 'bicycle left 1.wav',
+        'right': 'bicycle right 1.wav',
+        'centre': 'bicycle centre 1.wav'
+    },
+    'car': {
+        'left': 'car left 1.wav',
+        'right': 'car right 1.wav',
+        'centre': 'car centre 1.wav'
+    },
+    'motorcycle': {
+        'left': 'motorcycle left 1.wav',
+        'right': 'motorcycle right 1.wav',
+        'centre': 'motorcycle centre 1.wav'
+    },
+    'airplane': {
+        'left': 'airplane left 1.wav',
+        'right': 'airplane right 1.wav',
+        'centre': 'airplane centre 1.wav'
+    },
+    'bus': {
+        'left': 'bus left 1.wav',
+        'right': 'bus right 1.wav',
+        'centre': 'bus centre 1.wav'
+    },
+    'train': {
+        'left': 'train left 1.wav',
+        'right': 'train right 1.wav',
+        'centre': 'train centre 1.wav'
+    },
+    'truck': {
+        'left': 'truck left 1.wav',
+        'right': 'truck right 1.wav',
+        'centre': 'truck centre 1.wav'
+    },
+    'boat': {
+        'left': 'boat left 1.wav',
+        'right': 'boat right 1.wav',
+        'centre': 'boat centre 1.wav'
+    },
+    'traffic light': {
+        'left': 'traffic light left 1.wav',
+        'right': 'traffic light right 1.wav',
+        'centre': 'traffic light centre 1.wav'
+    },
+    'fire hydrant': {
+        'left': 'fire hydrant left 1.wav',
+        'right': 'fire hydrant right 1.wav',
+        'centre': 'fire hydrant centre 1.wav'
+    },
+    'stop sign': {
+        'left': 'stop sign left 1.wav',
+        'right': 'stop sign right 1.wav',
+        'centre': 'stop sign centre 1.wav'
+    },
+    'parking meter': {
+        'left': 'parking meter left 1.wav',
+        'right': 'parking meter right 1.wav',
+        'centre': 'parking meter centre 1.wav'
+    },
+    'bench': {
+        'left': 'bench left 1.wav',
+        'right': 'bench right 1.wav',
+        'centre': 'bench centre 1.wav'
+    },
+    'bird': {
+        'left': 'bird left 1.wav',
+        'right': 'bird right 1.wav',
+        'centre': 'bird centre 1.wav'
+    },
+    'cat': {
+        'left': 'cat left 1.wav',
+        'right': 'cat right 1.wav',
+        'centre': 'cat centre 1.wav'
+    },
+    'dog': {
+        'left': 'dog left 1.wav',
+        'right': 'dog right 1.wav',
+        'centre': 'dog centre 1.wav'
+    },
+    'horse': {
+        'left': 'horse left 1.wav',
+        'right': 'horse right 1.wav',
+        'centre': 'horse centre 1.wav'
+    },
+    'sheep': {
+        'left': 'sheep left 1.wav',
+        'right': 'sheep right 1.wav',
+        'centre': 'sheep centre 1.wav'
+    },
+    'cow': {
+        'left': 'cow left 1.wav',
+        'right': 'cow right 1.wav',
+        'centre': 'cow centre 1.wav'
+    },
+    'elephant': {
+        'left': 'elephant left 1.wav',
+        'right': 'elephant right 1.wav',
+        'centre': 'elephant centre 1.wav'
+    },
+    'bear': {
+        'left': 'bear left 1.wav',
+        'right': 'bear right 1.wav',
+        'centre': 'bear centre 1.wav'
+    },
+    'zebra': {
+        'left': 'zebra left 1.wav',
+        'right': 'zebra right 1.wav',
+        'centre': 'zebra centre 1.wav'
+    },
+    'giraffe': {
+        'left': 'giraffe left 1.wav',
+        'right': 'giraffe right 1.wav',
+        'centre': 'giraffe centre 1.wav'
+    },
+    'backpack': {
+        'left': 'backpack left 1.wav',
+        'right': 'backpack right 1.wav',
+        'centre': 'backpack centre 1.wav'
+    },
+    'umbrella': {
+        'left': 'umbrella left 1.wav',
+        'right': 'umbrella right 1.wav',
+        'centre': 'umbrella centre 1.wav'
+    },
+    'handbag': {
+        'left': 'handbag left 1.wav',
+        'right': 'handbag right 1.wav',
+        'centre': 'handbag centre 1.wav'
+    },
+    'tie': {
+        'left': 'tie left 1.wav',
+        'right': 'tie right 1.wav',
+        'centre': 'tie centre 1.wav'
+    },
+    'suitcase': {
+        'left': 'suitcase left 1.wav',
+        'right': 'suitcase right 1.wav',
+        'centre': 'suitcase centre 1.wav'
+    },
+    'frisbee': {
+        'left': 'frisbee left 1.wav',
+        'right': 'frisbee right 1.wav',
+        'centre': 'frisbee centre 1.wav'
+    },
+    'skis': {
+        'left': 'skis left 1.wav',
+        'right': 'skis right 1.wav',
+        'centre': 'skis centre 1.wav'
+    },
+    'snowboard': {
+        'left': 'snowboard left 1.wav',
+        'right': 'snowboard right 1.wav',
+        'centre': 'snowboard centre 1.wav'
+    },
+    'sports ball': {
+        'left': 'sports ball left 1.wav',
+        'right': 'sports ball right 1.wav',
+        'centre': 'sports ball centre 1.wav'
+    },
+    'kite': {
+        'left': 'kite left 1.wav',
+        'right': 'kite right 1.wav',
+        'centre': 'kite centre 1.wav'
+    },
+    'baseball bat': {
+        'left': 'baseball bat left 1.wav',
+        'right': 'baseball bat right 1.wav',
+        'centre': 'baseball bat centre 1.wav'
+    },
+    'baseball glove': {
+        'left': 'baseball glove left 1.wav',
+        'right': 'baseball glove right 1.wav',
+        'centre': 'baseball glove centre 1.wav'
+    },
+    'skateboard': {
+        'left': 'skateboard left 1.wav',
+        'right': 'skateboard right 1.wav',
+        'centre': 'skateboard centre 1.wav'
+    },
+    'surfboard': {
+        'left': 'surfboard left 1.wav',
+        'right': 'surfboard right 1.wav',
+        'centre': 'surfboard centre 1.wav'
+    },
+    'tennis racket': {
+        'left': 'tennis racket left 1.wav',
+        'right': 'tennis racket right 1.wav',
+        'centre': 'tennis racket centre 1.wav'
+    },
+    'bottle': {
+        'left': 'bottle left 1.wav',
+        'right': 'bottle right 1.wav',
+        'centre': 'bottle centre 1.wav'
+    },
+    'wine glass': {
+        'left': 'wine glass left 1.wav',
+        'right': 'wine glass right 1.wav',
+        'centre': 'wine glass centre 1.wav'
+    },
+    'cup': {
+        'left': 'cup left 1.wav',
+        'right': 'cup right 1.wav',
+        'centre': 'cup centre 1.wav'
+    },
+    'fork': {
+        'left': 'fork left 1.wav',
+        'right': 'fork right 1.wav',
+        'centre': 'fork centre 1.wav'
+    },
+    'knife': {
+        'left': 'knife left 1.wav',
+        'right': 'knife right 1.wav',
+        'centre': 'knife centre 1.wav'
+    },
+    'spoon': {
+        'left': 'spoon left 1.wav',
+        'right': 'spoon right 1.wav',
+        'centre': 'spoon centre 1.wav'
+    },
+    'bowl': {
+        'left': 'bowl left 1.wav',
+        'right': 'bowl right 1.wav',
+        'centre': 'bowl centre 1.wav'
+    },
+    'banana': {
+        'left': 'banana left 1.wav',
+        'right': 'banana right 1.wav',
+        'centre': 'banana centre 1.wav'
+    },
+    'apple': {
+        'left': 'apple left 1.wav',
+        'right': 'apple right 1.wav',
+        'centre': 'apple centre 1.wav'
+    },
+    'sandwich': {
+        'left': 'sandwich left 1.wav',
+        'right': 'sandwich right 1.wav',
+        'centre': 'sandwich centre 1.wav'
+    },
+    'orange': {
+        'left': 'orange left 1.wav',
+        'right': 'orange right 1.wav',
+        'centre': 'orange centre 1.wav'
+    },
+    'broccoli': {
+        'left': 'broccoli left 1.wav',
+        'right': 'broccoli right 1.wav',
+        'centre': 'broccoli centre 1.wav'
+    },
+    'carrot': {
+        'left': 'carrot left 1.wav',
+        'right': 'carrot right 1.wav',
+        'centre': 'carrot centre 1.wav'
+    },
+    'hot dog': {
+        'left': 'hot dog left 1.wav',
+        'right': 'hot dog right 1.wav',
+        'centre': 'hot dog centre 1.wav'
+    },
+    'pizza': {
+        'left': 'pizza left 1.wav',
+        'right': 'pizza right 1.wav',
+        'centre': 'pizza centre 1.wav'
+    },
+    'donut': {
+        'left': 'donut left 1.wav',
+        'right': 'donut right 1.wav',
+        'centre': 'donut centre 1.wav'
+    },
+    'cake': {
+        'left': 'cake left 1.wav',
+        'right': 'cake right 1.wav',
+        'centre': 'cake centre 1.wav'
+    },
+    'chair': {
+        'left': 'chair left 1.wav',
+        'right': 'chair right 1.wav',
+        'centre': 'chair centre 1.wav'
+    },
+    'couch': {
+        'left': 'couch left 1.wav',
+        'right': 'couch right 1.wav',
+        'centre': 'couch centre 1.wav'
+    },
+    'potted plant': {
+        'left': 'potted plant left 1.wav',
+        'right': 'potted plant right 1.wav',
+        'centre': 'potted plant centre 1.wav'
+    },
+    'bed': {
+        'left': 'bed left 1.wav',
+        'right': 'bed right 1.wav',
+        'centre': 'bed centre 1.wav'
+    },
+    'dining table': {
+        'left': 'dining table left 1.wav',
+        'right': 'dining table right 1.wav',
+        'centre': 'dining table centre 1.wav'
+    },
+    'toilet': {
+        'left': 'toilet left 1.wav',
+        'right': 'toilet right 1.wav',
+        'centre': 'toilet centre 1.wav'
+    },
+    'tv': {
+        'left': 'tv left 1.wav',
+        'right': 'tv right 1.wav',
+        'centre': 'tv centre 1.wav'
+    },
+    'laptop': {
+        'left': 'laptop left 1.wav',
+        'right': 'laptop right 1.wav',
+        'centre': 'laptop centre 1.wav'
+    },
+    'mouse': {
+        'left': 'mouse left 1.wav',
+        'right': 'mouse right 1.wav',
+        'centre': 'mouse centre 1.wav'
+    },
+    'remote': {
+        'left': 'remote left 1.wav',
+        'right': 'remote right 1.wav',
+        'centre': 'remote centre 1.wav'
+    },
+    'keyboard': {
+        'left': 'keyboard left 1.wav',
+        'right': 'keyboard right 1.wav',
+        'centre': 'keyboard centre 1.wav'
+    },
+    'cell phone': {
+        'left': 'cell phone left 1.wav',
+        'right': 'cell phone right 1.wav',
+        'centre': 'cell phone centre 1.wav'
+    },
+    'microwave': {
+        'left': 'microwave left 1.wav',
+        'right': 'microwave right 1.wav',
+        'centre': 'microwave centre 1.wav'
+    },
+    'oven': {
+        'left': 'oven left 1.wav',
+        'right': 'oven right 1.wav',
+        'centre': 'oven centre 1.wav'
+    },
+    'toaster': {
+        'left': 'toaster left 1.wav',
+        'right': 'toaster right 1.wav',
+        'centre': 'toaster centre 1.wav'
+    },
+    'sink': {
+        'left': 'sink left 1.wav',
+        'right': 'sink right 1.wav',
+        'centre': 'sink centre 1.wav'
+    },
+    'refrigerator': {
+        'left': 'refrigerator left 1.wav',
+        'right': 'refrigerator right 1.wav',
+        'centre': 'refrigerator centre 1.wav'
+    },
+    'book': {
+        'left': 'book left 1.wav',
+        'right': 'book right 1.wav',
+        'centre': 'book centre 1.wav'
+    },
+    'clock': {
+        'left': 'clock left 1.wav',
+        'right': 'clock right 1.wav',
+        'centre': 'clock centre 1.wav'
+    },
+    'vase': {
+        'left': 'vase left 1.wav',
+        'right': 'vase right 1.wav',
+        'centre': 'vase centre 1.wav'
+    },
+    'scissors': {
+        'left': 'scissors left 1.wav',
+        'right': 'scissors right 1.wav',
+        'centre': 'scissors centre 1.wav'
+    },
+    'teddy bear': {
+        'left': 'teddy bear left 1.wav',
+        'right': 'teddy bear right 1.wav',
+        'centre': 'teddy bear centre 1.wav'
+    },
+    'hair drier': {
+        'left': 'hair drier left 1.wav',
+        'right': 'hair drier right 1.wav',
+        'centre': 'hair drier centre 1.wav'
+    },
+    'toothbrush': {
+        'left': 'toothbrush left 1.wav',
+        'right': 'toothbrush right 1.wav',
+        'centre': 'toothbrush centre 1.wav'
+    }
+}
 
 #for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):
 while True:
