@@ -6,7 +6,7 @@ import sys
 import time
 from threading import Thread
 import importlib.util
-
+import subprocess
 VERSION = "0.1.0"
 class VideoStream:
     """Camera object that controls video streaming from the Picamera"""
@@ -592,13 +592,23 @@ while True:
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
+	image_center_x = imW / 2
+        object_center_x = (xmin + xmax) / 2
+        object_location = 'center'
+        if object_center_x < image_center_x - 50:
+		object_location = 'left'
+        elif object_center_x > image_center_x + 50:
+		object_location = 'right'
 
-            # Play sound
-            if object_name in object_sounds:
-                sound_path = object_sounds[object_name]
-                subprocess.run(['aplay', sound_path])
-            else:
-                print("No audio files found: ", object_name)
+        # Display the object location
+        cv2.putText(frame, f'Location: {object_location}', (xmin, ymax + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        
+        # Play sound based on location and object
+        if object_name in object_sounds and object_location in object_sounds[object_name]:
+            sound_path = object_sounds[object_name][object_location]
+            subprocess.run(['aplay', sound_path])
+        else:
+            print("No audio files found:", object_name, object_location)
 
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
